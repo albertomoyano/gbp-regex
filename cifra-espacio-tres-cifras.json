@@ -1,0 +1,14 @@
+{
+  "formato": "gbpublisher-regex",
+  "version": 1,
+  "patrones": [
+    {
+      "nombre": "cifra-espacio-tres-cifras",
+      "descripcion": "Búsqueda: una cifra, un espacio y tres cifras («1 000», «25 000»); sin reemplazo",
+      "patron": "[0-9] [0-9]{3}",
+      "reemplazo": "",
+      "flags": "",
+      "texto_prueba": "Tenía 1 000 ejemplares y 25 000 lectores; en total 1 000 000.\nPegado: abc3 4567xyz y 12 345.\nNo coinciden: 1  000 (dos espacios), 1 00 (dos cifras)."
+    }
+  ]
+}

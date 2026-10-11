@@ -1,0 +1,14 @@
+{
+  "formato": "gbpublisher-regex",
+  "version": 1,
+  "patrones": [
+    {
+      "nombre": "cita-sin-comilla",
+      "descripcion": "Búsqueda: línea que empieza con «> », un solo espacio y algo que no es «; sin reemplazo",
+      "patron": "^> [^«\\s]",
+      "reemplazo": "",
+      "flags": "m",
+      "texto_prueba": "> «Cita con comilla.»\n> Cita sin comilla.\n>  Dos espacios.\n>Sin espacio.\nTexto > a mitad de línea."
+    }
+  ]
+}
