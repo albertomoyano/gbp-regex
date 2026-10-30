@@ -1,0 +1,14 @@
+{
+  "formato": "gbpublisher-regex",
+  "version": 1,
+  "patrones": [
+    {
+      "nombre": "enfasis-en-signos",
+      "descripcion": "Quita la cursiva o la negrita que Word dejó sobre signos o espacios sueltos: «bla*.*», «bla** **bla». Las cursivas y negritas con texto se saltean. Pasar después espacio-antes-de-cierre.",
+      "patron": "^[ \\t]*(?:\\*[ \\t]*){3,}$(*SKIP)(*F)|(?<!\\*)(\\*{1,3})(?=[^*\\n]*[\\p{L}\\p{N}])[^*\\n]+?\\1(*SKIP)(*F)|(?<!\\*)(\\*{1,3})([ \\t.,;:!?()«»¿¡]+)\\2(?!\\*)",
+      "reemplazo": "$3",
+      "flags": "m",
+      "texto_prueba": "bla bla bla*.* y sigue.\nbla bla bla** **bla bla bla\ndos en un párrafo*,* y otra** **más*;*\ny*palabra* *,* caso del docx\ncursiva*. * con espacio\n**a** **b** no toca\n*a*,*b* no toca\n*a* , *b* no toca\n***triple*** ***x*** no toca\n*a **b** c* no toca\n* * *\n**Introducción**\ntexto *(sic)* no toca y \\* \\* escapados"
+    }
+  ]
+}

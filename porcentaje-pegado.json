@@ -1,0 +1,14 @@
+{
+  "formato": "gbpublisher-regex",
+  "version": 1,
+  "patrones": [
+    {
+      "nombre": "porcentaje-pegado",
+      "descripcion": "«100 %» → «100%», también «‰»; quita el espacio (común, duro, fino o tabulador) entre la cifra o la } y el signo",
+      "patron": "([0-9}])[ \\t\\x{00A0}\\x{202F}]+([%‰])",
+      "reemplazo": "$1$2",
+      "flags": "",
+      "texto_prueba": "Subió 100 % y 12,5 % y 7  %.\nCon duro: 30 % y fino: 40 % y tab 5\t%.\nPor mil: 3 ‰ y 2 ‰.\nRango: 10-20 %.\nShortcode: [1000]{.num} %\nYa bien (no coincide): 100% y 3‰\nNo se tocan: el % de los casos, URL a%20b, fin de línea 50\n% siguiente."
+    }
+  ]
+}

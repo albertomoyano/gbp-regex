@@ -1,0 +1,14 @@
+{
+  "formato": "gbpublisher-regex",
+  "version": 1,
+  "patrones": [
+    {
+      "nombre": "nota-despues-del-signo",
+      "descripcion": "Enroque: «texto[^a].» → «texto.[^a]»; la llamada va después de los signos de cierre (. , ; : ! ? » ) ] ’ ” * _ -- ---)",
+      "patron": "(?<!^)((?:\\[\\^[^\\]\\s]+\\])+)((?:[.,;:!?»)\\]’”*_]|-{2,3})+)",
+      "reemplazo": "$2$1",
+      "flags": "m",
+      "texto_prueba": "Uno[^a]. Dos[^b], tres[^c]; cuatro[^d]: cinco[^e]? seis[^f]!\n«Cita[^g]». (Paréntesis[^h]). Suspensivos[^i]... *Cursiva[^j]*. Inciso ---dice[^k]--- y sigue.\nSeguidas[^o][^p].\nNo se tocan: nota[^l] y nota[^m]\nFin de línea[^n]\nPegada a letra[^q]palabra. Abre[^r](véase).\n[^a]: Definición que no se toca."
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "formato": "gbpublisher-regex",
+  "version": 1,
+  "patrones": [
+    {
+      "nombre": "nota-espacio-antes",
+      "descripcion": "Quita el espacio entre la palabra o el signo y la llamada de nota. Va ANTES de nota-despues-del-signo.",
+      "patron": "[ \\t]+((?:\\[\\^[^\\]\\s]+\\])+)",
+      "reemplazo": "$1",
+      "flags": "",
+      "texto_prueba": "dijo esto [^2] y siguió.\nVarias seguidas «cita» [^a][^b].\n[^2]: La definición no se toca.\nYa pegada[^3] no cambia."
+    },
+    {
+      "nombre": "espacio-antes-de-cierre",
+      "descripcion": "Quita el espacio antes de , ; : ! ? ) ] » y antes de un punto que no abre unos suspensivos.",
+      "patron": "(?<=\\S)[ \\t]+(?=[,;:!?)\\]»]|\\.(?!\\.))",
+      "reemplazo": "",
+      "flags": "",
+      "texto_prueba": "palabra , coma ( paréntesis ) ¿ pregunta ? «cita » fin .\nNo toca: dijo ... y siguió; (...) bien; 3,5 y 1.000."
+    },
+    {
+      "nombre": "espacio-despues-de-apertura",
+      "descripcion": "Quita el espacio después de ( [ ¿ ¡ «.",
+      "patron": "([(\\[¿¡«])[ \\t]+(?=\\S)",
+      "reemplazo": "$1",
+      "flags": "",
+      "texto_prueba": "( paréntesis ) ¿ pregunta ? ¡ grito ! « cita »\nNo toca: (bien) [sic] «bien»."
+    },
+    {
+      "nombre": "puntos-espaciados",
+      "descripcion": "Lleva «. . .» a la convención del .md, «...» (SC-40).",
+      "patron": "(?<![.\\w])\\.[ \\t]\\.[ \\t]\\.(?![ \\t]?\\.)",
+      "reemplazo": "...",
+      "flags": "",
+      "texto_prueba": "y entonces . . . nada.\nNo toca: fin. Otra. Y otra."
+    },
+    {
+      "nombre": "guion-no-separable",
+      "descripcion": "U+2011 (guion de no separación de Word) a guion común. Revisar si el corte importa.",
+      "patron": "\\x{2011}",
+      "reemplazo": "-",
+      "flags": "",
+      "texto_prueba": "no‑corte y ex‑ministro"
+    },
+    {
+      "nombre": "raya-dialogo-inicio",
+      "descripcion": "Guion o semirraya al comienzo de párrafo a raya de diálogo pegada (---). Revisar en la grilla: puede ser una viñeta tecleada.",
+      "patron": "^(?:--|-)(?!-)[ \\t]?(?=[\\p{L}¿¡«])",
+      "reemplazo": "---",
+      "flags": "m",
+      "texto_prueba": "-- Hola, ¿cómo estás?\n-Bien.\n---Ya correcta.\n- 3 no es diálogo"
+    },
+    {
+      "nombre": "tachado",
+      "descripcion": "Quita el tachado ~~...~~. En Word suele significar «borrar esto»: revisar antes de reemplazar.",
+      "patron": "~~(.+?)~~",
+      "reemplazo": "$1",
+      "flags": "",
+      "texto_prueba": "texto ~~tachado~~ y ~~otro más~~."
+    },
+    {
+      "nombre": "separador-tecleado",
+      "descripcion": "Separador «***» o «* * *» tecleado en Word a bloque froufrou (SC-36). Solo libros.",
+      "patron": "^[ \\t]*(?:\\\\?\\*[ \\t]*){3}$",
+      "reemplazo": "::: froufrou\n\n[/froufrou]: # ()\n:::",
+      "flags": "m",
+      "texto_prueba": "Fin del tramo.\n\n\\*\\*\\*\n\nOtro tramo.\n\n* * *\n\nNo toca: **negrita**."
+    },
+    {
+      "nombre": "aviso-nota-manual",
+      "descripcion": "AVISO. Superíndice numérico pegado a texto: posible llamada de nota tecleada a mano. Falso positivo: unidades (m^2^). El reemplazo deja el texto igual.",
+      "patron": "(?<=[\\p{L}.,;:!?»)])\\^\\d{1,3}\\^",
+      "reemplazo": "$0",
+      "flags": "",
+      "texto_prueba": "como dijo^3^ el autor.^12^ Unidad: m^2^. Sin: 2^10^ no."
+    },
+    {
+      "nombre": "aviso-semirraya-entre-palabras",
+      "descripcion": "AVISO. «--» pegado entre dos palabras: casi siempre una raya tecleada como doble guion en Word.",
+      "patron": "(?<=\\p{L})--(?!-)(?=\\p{L})",
+      "reemplazo": "$0",
+      "flags": "",
+      "texto_prueba": "el inciso--dijo--siguió. No toca: 1990--2000, palabra---raya."
+    },
+    {
+      "nombre": "aviso-rayas-flotantes",
+      "descripcion": "AVISO. Raya o semirraya con espacio a los dos lados: un inciso mal espaciado.",
+      "patron": "(?<=\\s)---?(?!-)(?=\\s)",
+      "reemplazo": "$0",
+      "flags": "",
+      "texto_prueba": "el inciso --- dijo --- siguió; otro -- así -- igual.\nNo toca: bien ---dijo--- así."
+    },
+    {
+      "nombre": "aviso-puntos-mal-contados",
+      "descripcion": "AVISO. Dos puntos seguidos, o cuatro o más.",
+      "patron": "(?<!\\.)(?:\\.\\.|\\.{4,})(?!\\.)",
+      "reemplazo": "$0",
+      "flags": "",
+      "texto_prueba": "así.. y así.... pero no ... ni (...) ni fin."
+    },
+    {
+      "nombre": "aviso-sin-espacio-tras-signo",
+      "descripcion": "AVISO. Coma, punto y coma o dos puntos entre letras, o punto pegado a una oración nueva.",
+      "patron": "(?<=\\p{L})[,;:](?=\\p{L})|(?<=\\p{Ll})[.?!](?=\\p{Lu}\\p{Ll})",
+      "reemplazo": "$0",
+      "flags": "",
+      "texto_prueba": "uno,dos;tres fin.Empieza otra. No toca: 3,5; S.A.; https://x.org; www.sitio.com"
+    },
+    {
+      "nombre": "aviso-seudotitulo",
+      "descripcion": "AVISO. Párrafo entero en negrita: probable título sin estilo en el Word.",
+      "patron": "^\\*\\*[^*\\n]+\\*\\*[ \\t]*$",
+      "reemplazo": "$0",
+      "flags": "m",
+      "texto_prueba": "**Introducción**\n\nTexto con **negrita** dentro."
+    },
+    {
+      "nombre": "aviso-linea-mayusculas",
+      "descripcion": "AVISO. Línea sin minúsculas de 12 caracteres o más: mayúsculas tecleadas.",
+      "patron": "^(?=[^\\n]*\\p{Lu}{4})[^\\p{Ll}\\n]{12,}$",
+      "reemplazo": "$0",
+      "flags": "m",
+      "texto_prueba": "ESTE PÁRRAFO ESTÁ EN MAYÚSCULAS\nNo toca: la ONU y la UNESCO.\n| 1990 | 2000 |"
+    },
+    {
+      "nombre": "aviso-lista-tecleada",
+      "descripcion": "AVISO. Párrafo que empieza con un número, una letra o una viñeta tecleados: lista hecha a mano.",
+      "patron": "^(?:\\d{1,2}\\\\?[.)]|\\p{Ll}\\\\?\\)|[•·▪◦‣])[ \\t]",
+      "reemplazo": "$0",
+      "flags": "m",
+      "texto_prueba": "1\\. primero\n2) segundo\na\\) letra\n• bolita\nNo toca: 1990 fue un año."
+    },
+    {
+      "nombre": "aviso-cita-por-sangria",
+      "descripcion": "AVISO. Cita en bloque: tras importar un Word, pandoc la arma desde una sangría izquierda. Confirmar que sea una cita y no un poema o una lista.",
+      "patron": "^>[ \\t]?",
+      "reemplazo": "$0",
+      "flags": "m",
+      "texto_prueba": "> P12 sangrado izquierdo\nTexto normal."
+    }
+  ]
+}
